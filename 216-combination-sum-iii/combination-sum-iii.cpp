@@ -12,7 +12,9 @@ class Solution {
             if(sum+i > n)
             break;
             temp.push_back(i);
-            solve(i+1,res,temp,k,n,sum+i);
+            sum+=i;
+            solve(i+1,res,temp,k,n,sum);
+            sum-=i;
             temp.pop_back();
         }
     }
