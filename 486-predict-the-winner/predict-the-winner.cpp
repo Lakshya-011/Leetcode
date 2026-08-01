@@ -1,12 +1,16 @@
 class Solution {
 public:
-int solve(int i,int j,vector<int> &nums){
+
+int solve(int i,int j,vector<int> &nums,vector<vector<int>> &dp){
     if(i>j)
     return 0;
-    return max(nums[i]-solve(i+1,j,nums),nums[j]-solve(i,j-1,nums));
+    if(dp[i][j]!=INT_MIN)
+    return dp[i][j];
+    return dp[i][j]=max(nums[i]-solve(i+1,j,nums,dp),nums[j]-solve(i,j-1,nums,dp));
 }
     bool predictTheWinner(vector<int>& nums) {
         int n=nums.size();
-        return solve(0,n-1,nums)>=0;
+        vector<vector<int>> dp(n,vector<int>(n,INT_MIN));
+        return solve(0,n-1,nums,dp)>=0;
     }
 };
