@@ -8,42 +8,37 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+class compare{
+    public:
+    bool operator()(ListNode* a, ListNode* b){
+        return a->val > b->val;
+    }
+};
 class Solution {
-    ListNode* mergesort(vector<ListNode*>& lists, int s, int e){
-        if(s==e)
-        return lists[s];
 
-        if(s+1==e)
-        return merge(lists[s],lists[e]);
-
-        int mid=s+(e-s)/2;
-        ListNode* left=mergesort(lists,s,mid);
-        ListNode* right=mergesort(lists,mid+1,e);
-        return merge(left,right);
-    }
-    ListNode* merge(ListNode* l1,ListNode* l2){
-        ListNode* dummy=new ListNode(0);
-        ListNode* temp=dummy;
-
-        while(l1&&l2){
-            if(l1->val<l2->val){
-                temp->next=l1;
-                l1=l1->next;
-            }
-            else{
-                temp->next=l2;
-                l2=l2->next;
-            }
-            temp=temp->next;
-        }
-        temp->next=l1?l1:l2;
-        return dummy->next;
-    }
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        if(lists.empty())
-        return NULL;
-
-        return mergesort(lists,0,lists.size()-1);
+        priority_queue<ListNode*, vector<ListNode*> , compare> pq;
+        for(int i=0;i<lists.size();i++){
+            if(lists[i]!=NULL)
+            pq.push(lists[i]);
+        }
+        ListNode* head=NULL;
+        ListNode* tail=NULL;
+        while(!pq.empty()){
+            ListNode* temp=pq.top();
+            pq.pop();
+            if(temp->next!=NULL){
+                pq.push(temp->next);
+            }
+            if(head==NULL){
+                head=tail=temp;
+            }
+            else{
+                tail->next=temp;
+                tail=temp;
+            }            
+        }
+        return head;
     }
 };
